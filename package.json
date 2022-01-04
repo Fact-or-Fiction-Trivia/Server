@@ -1,5 +1,5 @@
 {
-  "name": "omniagent",
+  "name": "fof",
   "version": "2.0.0",
   "description": "Some boilerplate code to get you started - get shakin'!",
   "main": "index.js",
@@ -30,6 +30,7 @@
     "pg": "^8.5.1",
     "qs": "^6.10.1",
     "react": "^16.8.6",
+    "react-bootstrap": "^2.1.0",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.1",
     "react-router-dom": "^5.0.0",

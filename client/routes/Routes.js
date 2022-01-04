@@ -4,21 +4,11 @@ import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { me } from "../redux/reducers/auth";
 
-import Feed from "../views/Feed";
-import Account from "../views/Account";
 import Portal from "../interface/Portal";
-import { Login } from "../views/AuthForm";
+import AuthForm from "../views/AuthForm";
 import FourOhFour from "../views/FourOhFour";
-import Admin from "../views/Admin";
-import Keywords from "../views/Keywords";
-import Invite from "../views/Invite";
-import Forgot from "../views/Forgot";
-import ResetPassword from "../views/ResetPassword";
 import Home from "../views/Home";
 import Authenticate from "../views/Authenticate";
-import Dashboard from "../views/Dashboard";
-import AgentDashboard from "../views/AgentDashboard";
-import AuthSimpleLayout from "../views/AuthSimpleLayout";
 
 const Routes = ({ getMe, isLoggedIn, preCheck, auth }) => {
   useEffect(() => {
@@ -28,16 +18,8 @@ const Routes = ({ getMe, isLoggedIn, preCheck, auth }) => {
   const renderer = (Component, props) => (
     <Portal {...{ Component, props, preCheck, auth }} />
   );
-  //height: "calc(100vh - 112px)",
+
   return (
-    // <div
-    //   className="container-fluid"
-    //   style={{
-    //     height: "100vh",
-    //     backgroundColor: "#c11c24",
-    //     overflowY: "scroll",
-    //   }}
-    // >
     <>
       {isLoggedIn ? (
         <Switch>
@@ -46,37 +28,8 @@ const Routes = ({ getMe, isLoggedIn, preCheck, auth }) => {
             path="/login"
             render={(props) => renderer(Authenticate, props)}
           />
+          <Route exact path="/" render={(props) => renderer(Home, props)} />
 
-          <Route
-            exact
-            path="/"
-            render={(props) => renderer(Dashboard, props)}
-          />
-          <Route
-            exact
-            path="/agent-dashboard/:agentId"
-            render={(props) => renderer(AgentDashboard, props)}
-          />
-          <Route
-            exact
-            path="/keyword"
-            render={(props) => renderer(Keywords, props)}
-          />
-          <Route
-            exact
-            path="/account"
-            render={(props) => renderer(Account, props)}
-          />
-          <Route
-            exact
-            path="/admin"
-            render={(props) => renderer(Admin, props)}
-          />
-          <Route
-            exact
-            path="/registered"
-            render={(props) => renderer(Login, props)}
-          />
           <Route
             exact
             path="/:any"
@@ -85,31 +38,15 @@ const Routes = ({ getMe, isLoggedIn, preCheck, auth }) => {
         </Switch>
       ) : (
         <Switch>
-          <Route exact path="/" render={(props) => renderer(Home, props)} />
+          <Route exact path="/" render={(props) => renderer(AuthForm, props)} />
           <Route
             exact
             path="/login"
-            render={(props) => renderer(AuthSimpleLayout, props)}
-          />
-          <Route
-            exact
-            path="/forgot-password"
-            render={(props) => renderer(Forgot, props)}
-          />
-          <Route
-            exact
-            path="/password-reset/:userId/:token"
-            render={(props) => renderer(ResetPassword, props)}
-          />
-          <Route
-            exact
-            path="/invite/:id"
-            render={(props) => renderer(Invite, props)}
+            render={(props) => renderer(AuthForm, props)}
           />
         </Switch>
       )}
     </>
-    // </div>
   );
 };
 

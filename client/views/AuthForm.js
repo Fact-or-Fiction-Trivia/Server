@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { authenticate } from "../redux/reducers/auth";
-import { toast } from "react-toastify";
+
 import { Button, Form, Row, Col } from "react-bootstrap";
 import Divider from "./Divider";
-import SocialAuthButtons from "./SocialAuthButtons";
 
 const AuthForm = ({ name, displayName, authenticateUser, error }) => {
   const hasLabel = true;
@@ -96,8 +95,6 @@ const AuthForm = ({ name, displayName, authenticateUser, error }) => {
       </Form.Group>
 
       <Divider className="mt-4">or log in with</Divider>
-
-      <SocialAuthButtons />
     </Form>
   );
   return (
