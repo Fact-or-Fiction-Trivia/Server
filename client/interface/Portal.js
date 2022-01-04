@@ -1,13 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Login } from "../views/AuthForm";
 import Loading from "../views/Loading";
-import Invite from "../views/Invite";
-import Forgot from "../views/Forgot";
 import { receiveInvitation } from "../redux/reducers/auth";
-import ResetPassword from "../views/ResetPassword";
-import { Redirect } from "react-router";
 
 export const Portal = ({ Component, props, auth, preCheck }) => {
   return (

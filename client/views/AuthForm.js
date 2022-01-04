@@ -18,7 +18,7 @@ const AuthForm = ({ name, displayName, authenticateUser, error }) => {
   // Handler
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast.success(`Logged in as ${formData.email}`);
+
     authenticateUser(formData);
   };
 
@@ -96,84 +96,6 @@ const AuthForm = ({ name, displayName, authenticateUser, error }) => {
 
       <Divider className="mt-4">or log in with</Divider>
     </Form>
-  );
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        name={name}
-        style={{
-          padding: "20px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: 325,
-          width: 400,
-          backgroundColor: "rgb(16 20 24 / 50%)",
-          // border: "1px solid #48bf84",
-          boxShadow: "0 0 1px 0 #E5EAFA",
-        }}
-      >
-        <div>
-          <h3 style={{ color: "#E5EAFA" }}>Login</h3>
-        </div>
-        <div class="d-grid gap-3" style={{ width: "100%" }}>
-          <div style={{ width: "100%" }}>
-            <div class="col-auto">
-              <input
-                name="email"
-                type="text"
-                class="form-control"
-                id="autoSizingInputGroup"
-                placeholder="Email"
-                required
-                style={{ backgroundColor: "#E5EAFA" }}
-              />
-            </div>
-          </div>
-          <div style={{ width: "100%" }}>
-            <div class="col-auto">
-              <input
-                name="password"
-                type="password"
-                class="form-control green"
-                id="autoSizingInputGroup"
-                placeholder="Password"
-                required
-                style={{ backgroundColor: "#E5EAFA" }}
-              />
-            </div>
-          </div>
-        </div>
-        <div style={{ width: "100%" }}>
-          <button
-            type="submit"
-            class="btn"
-            style={{
-              width: "100%",
-              backgroundColor: "#c11c24",
-              color: "rgb(35, 44, 51)",
-              fontWeight: 700,
-            }}
-          >
-            LOG IN
-          </button>
-        </div>
-        <Link to="/forgot-password" style={{ color: "#E5EAFA" }}>
-          Forgot Password?
-        </Link>
-
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-    </div>
   );
 };
 

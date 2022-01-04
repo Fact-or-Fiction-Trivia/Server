@@ -7,7 +7,6 @@ module.exports = router;
 router.post("/login", async (req, res, next) => {
   try {
     const token = await User.authenticate(req.body);
-    console.log("TOKEN", token);
     res.cookie("token", token, { maxAge: 432000000 });
     res.sendStatus(201);
   } catch (err) {
