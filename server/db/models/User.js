@@ -21,6 +21,7 @@ const User = db.define("user", {
       }`;
     },
   },
+
   email: {
     type: Sequelize.STRING,
     unique: true,
@@ -36,8 +37,19 @@ const User = db.define("user", {
     type: Sequelize.ENUM("User", "Admin"),
     allowNull: false,
   },
+  affiliation: {
+    type: Sequelize.ENUM("Democrat", "Republican", "Independent", "Other"),
+    allowNull: false,
+  },
 });
 
+/**
+ *  username: {
+    type: Sequelize.STRING,
+    unique: true,
+    allowNull: false,
+  },
+ */
 module.exports = User;
 
 /**

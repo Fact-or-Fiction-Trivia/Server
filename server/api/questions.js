@@ -1,62 +1,53 @@
 /* eslint-disable no-unused-vars */
 const router = require("express").Router();
 
-const { OffcanvasTitle } = require("react-bootstrap");
 const {
   Op,
-  models: { User, Agent, Transaction, Client, Property },
+  models: { User, Question, Tag },
 } = require("../db");
 
 const { requireToken, isAgentOfUser } = require("./middleware");
 
 /**
  * GET /
- * All agents for logged in user
+ * All Questions
  */
-router.get("/", requireToken, async (req, res, next) => {
+router.get("/", async (req, res, next) => {
+  try {
+    res.json(await Question.findAll());
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /:questionId
+ * Question with question ID
+ */
+router.get("/:questionId", async (req, res, next) => {
+  try {
+    const { questionId } = req.params;
+    res.json(await Question.findByPk(questionId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * GET /users
+ * All questions created by User
+ */
+router.get("/users", requireToken, async (req, res, next) => {
   try {
     res.json(
-      await User.findByPk(req.user.id, { include: [Agent] }).then(
-        (user) => user.agents
-      )
+      await User.findByPk(req.user.id, {
+        include: [{ model: Question, include: [Tag] }],
+      }).then((user) => user.questions)
     );
   } catch (err) {
     next(err);
   }
 });
-
-/**
- * GET /:agentId
- * Agent by id for logged in user
- */
-router.get("/:agentId", requireToken, isAgentOfUser, async (req, res, next) => {
-  try {
-    res.json(await Agent.findByPk(req.agentId));
-  } catch (err) {
-    next(err);
-  }
-});
-
-/**
- * GET /:agentId/transactions
- * All transactions for a specific agent
- */
-router.get(
-  "/:agentId/transactions",
-  requireToken,
-  isAgentOfUser,
-  async (req, res, next) => {
-    try {
-      res.json(
-        await Agent.findByPk(req.agentId, {
-          include: [{ model: Transaction, include: [Client, Property] }],
-        }).then(async (agent) => agent.transactions)
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
 
 /**
  * POST /
@@ -65,7 +56,7 @@ router.get(
  */
 router.post("/", requireToken, async (req, res, next) => {
   try {
-    const agent = await Agent.create(req.body);
+    const question = await Agent.create(req.body);
     await req.user.addAgent(agent);
     await agent.reload();
     res.json(agent);

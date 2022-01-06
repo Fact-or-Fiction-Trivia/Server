@@ -3,8 +3,10 @@
 
 const {
   db,
-  models: { User },
+  models: { User, Tag, Question },
 } = require("../server/db");
+
+const csvParser = require("./csv");
 
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
@@ -15,13 +17,14 @@ async function seed() {
   const myDB = {
     users: (() =>
       user_seed_data.map((user) => {
-        const { f, l, r } = user;
+        const { f, l, r, a } = user;
         return {
           firstName: f,
           lastName: l,
           email: `${f + l}@factorfiction.com`,
           password: "12345678",
           role: r,
+          affiliation: a,
         };
       }))(),
   };
@@ -30,6 +33,29 @@ async function seed() {
   const allUsers = await User.bulkCreate(users, {
     returning: true,
   });
+
+  const { rawQuestions, rawTags } = await csvParser();
+
+  const tags = [...rawTags].map((tag) => ({ name: tag }));
+
+  const questions = Object.values(rawQuestions).map((question) => {
+    const { text, answer, explanation, expiration, source } = question;
+    return { text, answer, explanation, source, status: "Approved" };
+  });
+
+  const allTags = await Tag.bulkCreate(tags, {
+    returning: true,
+  });
+
+  const allQuestions = await Question.bulkCreate(questions, {
+    returning: true,
+  });
+
+  const [admin, user] = allUsers;
+  const [one, two, three, four] = allQuestions;
+  const [tag1, tag2, tag3, tag4] = allTags;
+  await user.addQuestion([one, two]);
+  await one.addTag([tag1, tag2]);
 }
 
 /*
