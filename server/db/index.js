@@ -26,5 +26,7 @@ module.exports = {
     User,
     Question,
     Tag,
+    UserAnswered,
+    Streak,
   },
 };

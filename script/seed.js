@@ -3,7 +3,7 @@
 
 const {
   db,
-  models: { User, Tag, Question },
+  models: { User, Tag, Question, UserAnswered, Streak },
 } = require("../server/db");
 
 const csvParser = require("./csv");
@@ -37,11 +37,22 @@ async function seed() {
   const { rawQuestions, rawTags } = await csvParser();
 
   const tags = [...rawTags].map((tag) => ({ name: tag }));
-
+  // console.log(tags);
+  // console.log([...rawTags]);
   const questions = Object.values(rawQuestions).map((question) => {
-    const { text, answer, explanation, expiration, source } = question;
+    const { text, answer, explanation, expiration, source, tags } = question;
     return { text, answer, explanation, source, status: "Approved" };
   });
+
+  const questionTags = Object.values(rawQuestions).reduce(
+    (tagsObj, question) => {
+      const { text, tags } = question;
+      tagsObj[text] = tags;
+      return tagsObj;
+    },
+    {}
+  );
+  // console.log(questionTags);
 
   const allTags = await Tag.bulkCreate(tags, {
     returning: true,
@@ -50,11 +61,33 @@ async function seed() {
   const allQuestions = await Question.bulkCreate(questions, {
     returning: true,
   });
-
+  allQuestions.forEach((question) => {
+    const { text } = question;
+    const tags = questionTags[text];
+    tags.forEach((tagName) => {
+      const foundTag = allTags.find((tag) => {
+        return tag.name === tagName;
+      });
+      // console.log(foundTag && foundTag.id, `T ${tagName} T`);
+      if (foundTag) {
+        question.addTag(foundTag.id);
+      }
+    });
+    // console.log(tags);
+  });
   const [admin, user] = allUsers;
   const [one, two, three, four] = allQuestions;
   const [tag1, tag2, tag3, tag4] = allTags;
-  await user.addQuestion([one, two]);
+  await user.addQuestion(two);
+
+  const answered = await UserAnswered.create({
+    answeredCorrectly: true,
+    userId: user.id,
+    questionId: one.id,
+  });
+  const streak = await Streak.create({ score: 900, userId: user.id });
+  streak.addUseranswered(answered);
+  // console.log(Object.keys(user.__proto__));
   await one.addTag([tag1, tag2]);
 }
 

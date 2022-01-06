@@ -5,7 +5,6 @@ const UserAnswered = db.define("useranswered", {
   answeredCorrectly: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
-    defaultValue: true,
   },
 });
 
