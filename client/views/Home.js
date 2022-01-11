@@ -1,12 +1,13 @@
 import React from "react";
-import { connect } from "react-redux";
+import Questions from "./Questions";
+import { Container } from "react-bootstrap";
 
-export const Home = (props) => {
-  return <div>Hello</div>;
+const Home = () => {
+  return (
+    <Container>
+      <Questions />
+    </Container>
+  );
 };
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

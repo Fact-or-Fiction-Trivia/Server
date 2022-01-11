@@ -1,9 +1,9 @@
 const fs = require("fs");
 const { parse } = require("csv-parse");
 
-async function parseData(fileData) {
+async function parseData(data) {
   return new Promise((resolve, reject) => {
-    parse(fileData, { columns: false, trim: true }, function (err, rows) {
+    parse(data, { columns: false, trim: true }, function (err, rows) {
       if (err) reject(err);
       //Hash Map and Set to store parsed data
       const rawQuestions = {},

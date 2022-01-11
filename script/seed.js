@@ -37,8 +37,7 @@ async function seed() {
   const { rawQuestions, rawTags } = await csvParser();
 
   const tags = [...rawTags].map((tag) => ({ name: tag }));
-  // console.log(tags);
-  // console.log([...rawTags]);
+
   const questions = Object.values(rawQuestions).map((question) => {
     const { text, answer, explanation, expiration, source, tags } = question;
     return { text, answer, explanation, source, status: "Approved" };
@@ -52,7 +51,6 @@ async function seed() {
     },
     {}
   );
-  // console.log(questionTags);
 
   const allTags = await Tag.bulkCreate(tags, {
     returning: true,
@@ -61,24 +59,22 @@ async function seed() {
   const allQuestions = await Question.bulkCreate(questions, {
     returning: true,
   });
-  allQuestions.forEach((question) => {
+
+  for (const question of allQuestions) {
     const { text } = question;
     const tags = questionTags[text];
-    tags.forEach((tagName) => {
+    for (const tagName of tags) {
       const foundTag = allTags.find((tag) => {
         return tag.name === tagName;
       });
-      // console.log(foundTag && foundTag.id, `T ${tagName} T`);
       if (foundTag) {
-        question.addTag(foundTag.id);
+        await question.addTag(foundTag.id);
       }
-    });
-    // console.log(tags);
-  });
+    }
+  }
+
   const [admin, user] = allUsers;
   const [one, two, three, four] = allQuestions;
-  const [tag1, tag2, tag3, tag4] = allTags;
-  await user.addQuestion(two);
 
   const answered = await UserAnswered.create({
     answeredCorrectly: true,
@@ -86,9 +82,7 @@ async function seed() {
     questionId: one.id,
   });
   const streak = await Streak.create({ score: 900, userId: user.id });
-  streak.addUseranswered(answered);
-  // console.log(Object.keys(user.__proto__));
-  await one.addTag([tag1, tag2]);
+  await streak.addUseranswered(answered);
 }
 
 /*

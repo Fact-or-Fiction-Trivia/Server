@@ -14,7 +14,7 @@ const { requireToken, isAgentOfUser } = require("./middleware");
  */
 router.get("/", async (req, res, next) => {
   try {
-    res.json(await Question.findAll());
+    res.json(await Question.findAll({ include: [Tag] }));
   } catch (err) {
     next(err);
   }
