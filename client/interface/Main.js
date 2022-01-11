@@ -2,13 +2,14 @@
 import React from "react";
 import Routes from "../routes/Routes";
 import Home from "../views/Home";
+import { Container } from "react-bootstrap";
 
 const Main = () => {
   return (
-    <div className="container">
+    <Container>
       {/* <Routes /> */}
       <Home />
-    </div>
+    </Container>
   );
 };
 

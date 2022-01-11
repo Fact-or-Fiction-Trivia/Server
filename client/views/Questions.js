@@ -6,7 +6,6 @@ import { ListGroup } from "react-bootstrap";
 
 const Questions = ({ getQuestions, questions }) => {
   const [streak, setStreak] = useState(0);
-
   useEffect(() => {
     getQuestions();
   }, []);

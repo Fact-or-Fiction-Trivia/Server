@@ -30,19 +30,32 @@ async function seed() {
   };
   const { users } = myDB;
 
+  //Create Users in Database
   const allUsers = await User.bulkCreate(users, {
     returning: true,
   });
 
+  //Parse Questions from CSV
   const { rawQuestions, rawTags } = await csvParser();
 
-  const tags = [...rawTags].map((tag) => ({ name: tag }));
-
+  //Format Questions into Array of objects for creation
   const questions = Object.values(rawQuestions).map((question) => {
     const { text, answer, explanation, expiration, source, tags } = question;
     return { text, answer, explanation, source, status: "Approved" };
   });
+  //Create Questions in Database
+  const allQuestions = await Question.bulkCreate(questions, {
+    returning: true,
+  });
 
+  //Format tags into Array of objects for creation
+  const tags = [...rawTags].map((tag) => ({ name: tag }));
+  //Create Tags in Database
+  const allTags = await Tag.bulkCreate(tags, {
+    returning: true,
+  });
+
+  //Reduce rawQuestions into an object to easily grab the tags assocaited to each question
   const questionTags = Object.values(rawQuestions).reduce(
     (tagsObj, question) => {
       const { text, tags } = question;
@@ -52,14 +65,7 @@ async function seed() {
     {}
   );
 
-  const allTags = await Tag.bulkCreate(tags, {
-    returning: true,
-  });
-
-  const allQuestions = await Question.bulkCreate(questions, {
-    returning: true,
-  });
-
+  //Associate all tags to specific questions
   for (const question of allQuestions) {
     const { text } = question;
     const tags = questionTags[text];
@@ -76,11 +82,14 @@ async function seed() {
   const [admin, user] = allUsers;
   const [one, two, three, four] = allQuestions;
 
+  //Create a UserAnswered as correct
   const answered = await UserAnswered.create({
     answeredCorrectly: true,
     userId: user.id,
     questionId: one.id,
   });
+
+  //Create a streak and associate UserAnswered
   const streak = await Streak.create({ score: 900, userId: user.id });
   await streak.addUseranswered(answered);
 }
