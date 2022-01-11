@@ -11,7 +11,7 @@ import {
 import { clearAnswer } from "../redux/reducers/question";
 
 const Question = ({ question, streak, setStreak, answered }) => {
-  const onClick = (answer) => {
+  const handleClick = (answer) => {
     if (question.answer === answer) {
       const newStreak = streak + 1;
       setStreak(newStreak);
@@ -35,8 +35,10 @@ const Question = ({ question, streak, setStreak, answered }) => {
               name="distribution"
               defaultValue={"exponential"}
             >
-              <ToggleButton onClick={() => onClick("Fact")}>Fact</ToggleButton>
-              <ToggleButton onClick={() => onClick("Fiction")}>
+              <ToggleButton onClick={() => handleClick("Fact")}>
+                Fact
+              </ToggleButton>
+              <ToggleButton onClick={() => handleClick("Fiction")}>
                 Fiction
               </ToggleButton>
             </ToggleButtonGroup>
