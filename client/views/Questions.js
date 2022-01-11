@@ -5,7 +5,7 @@ import { fetchQuestions } from "../redux/reducers/question";
 import { ListGroup } from "react-bootstrap";
 
 const Questions = ({ getQuestions, questions }) => {
-  const [streak, setStreak] = useState(0);
+  const [streak, setStreak] = useState([]);
   useEffect(() => {
     getQuestions();
   }, []);
@@ -18,7 +18,7 @@ const Questions = ({ getQuestions, questions }) => {
   );
 };
 
-const mapSignup = (state) => {
+const mapState = (state) => {
   const { questions } = state.question;
   return {
     questions,
@@ -33,4 +33,4 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-export default connect(mapSignup, mapDispatch)(Questions);
+export default connect(mapState, mapDispatch)(Questions);

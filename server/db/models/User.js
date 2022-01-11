@@ -42,7 +42,6 @@ const User = db.define("user", {
     allowNull: false,
   },
 });
-
 /**
  *  username: {
     type: Sequelize.STRING,

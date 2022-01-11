@@ -9,15 +9,27 @@ import {
   ToggleButton,
 } from "react-bootstrap";
 import { clearAnswer } from "../redux/reducers/question";
+import { createStreak } from "../redux/reducers/streak";
 
-const Question = ({ question, streak, setStreak, answered }) => {
+const Question = ({ question, streak, setStreak, answered, addStreak }) => {
   const handleClick = (answer) => {
     if (question.answer === answer) {
-      const newStreak = streak + 1;
-      setStreak(newStreak);
+      const newStreak = streak.length + 1;
+      setStreak([
+        ...streak,
+        { questionId: question.id, answeredCorrectly: true },
+      ]);
       answered(question.id);
       alert(`Correct, streak is now ${newStreak}`);
     } else {
+      /**
+       * if logged in
+       * api creates
+       */
+      addStreak([
+        ...streak,
+        { questionId: question.id, answeredCorrectly: false },
+      ]);
       const finalStreak = streak;
       setStreak(0);
       answered(question.id);
@@ -60,6 +72,9 @@ const mapDispatch = (dispatch) => {
   return {
     answered(questionId) {
       dispatch(clearAnswer(questionId));
+    },
+    addStreak(body) {
+      dispatch(createStreak(body));
     },
   };
 };

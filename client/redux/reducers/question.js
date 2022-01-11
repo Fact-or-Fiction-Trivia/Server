@@ -4,7 +4,7 @@ import axios from "axios";
 import history from "../../utils/history";
 
 export const fetchQuestions = createAsyncThunk(
-  "user/fetchQuestions",
+  "question/fetchQuestions",
   async () => {
     const { data } = await axios.get(`/api/questions`);
 

@@ -6,8 +6,8 @@ module.exports = router;
 
 router.post("/login", async (req, res, next) => {
   try {
-    const token = await User.authenticate(req.body);
-    res.cookie("token", token, { maxAge: 432000000 });
+    const tokenFof = await User.authenticate(req.body);
+    res.cookie("tokenFof", tokenFof, { maxAge: 432000000 });
     res.sendStatus(201);
   } catch (err) {
     next(err);
@@ -18,7 +18,7 @@ router.post("/signup", async (req, res, next) => {
   try {
     const user = await User.create(req.body);
     const token = await User.authenticate(user);
-    res.cookie("token", token, { maxAge: 432000000 });
+    res.cookie("tokenFof", token, { maxAge: 432000000 });
     res.sendStatus(201);
   } catch (err) {
     if (err.name === "SequelizeUniqueConstraintError") {
@@ -40,7 +40,7 @@ router.put("/register", async (req, res, next) => {
     );
     const user = await User.findByPk(id);
     const token = await user.generateToken();
-    res.cookie("token", token, { maxAge: 432000000 });
+    res.cookie("tokenFof", tokenFof, { maxAge: 432000000 });
     res.sendStatus(201);
   } catch (err) {
     next(err);
@@ -49,7 +49,7 @@ router.put("/register", async (req, res, next) => {
 
 router.get("/me", async (req, res, next) => {
   try {
-    res.json(await User.findByToken(req.cookies.token));
+    res.json(await User.findByToken(req.cookies.tokenFof));
   } catch (ex) {
     next(ex);
   }
@@ -57,11 +57,11 @@ router.get("/me", async (req, res, next) => {
 
 router.delete("/logout", async (req, res, next) => {
   try {
-    let cookie = req.cookies.token;
+    let cookie = req.cookies.tokenFof;
     if (cookie === undefined) {
       console.log("No Cookie Destroyed");
     } else {
-      res.cookie("token", "", { maxAge: 0 });
+      res.cookie("tokenFof", "", { maxAge: 0 });
       console.log("Cookie Destroyed");
     }
     res.sendStatus(204);
