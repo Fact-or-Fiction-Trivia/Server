@@ -12,7 +12,7 @@ const Questions = ({ getQuestions, questions }) => {
   return (
     <ListGroup>
       {questions.map((question) => (
-        <Question {...{ question, streak, setStreak }} />
+        <Question key={question.id} {...{ question, streak, setStreak }} />
       ))}
     </ListGroup>
   );

@@ -14,17 +14,14 @@ const { requireToken, isAgentOfUser } = require("./middleware");
  */
 router.get("/", requireToken, async (req, res, next) => {
   try {
-    const userQuestionIds = await User.findByPk(req.user.id, {
-      include: [{ model: Question, include: [Tag] }],
-    }).then(({ questions }) => {
-      return questions.map((question) => question.id);
-    });
-    //TODOD
+    const answeredQuestionIds = await User.findByPk(req.user.id, {
+      include: [{ model: Question }],
+    }).then(({ questions }) => questions.map((question) => question.id));
 
     res.json(
       await Question.findAll({
         include: [Tag],
-        where: { id: { [Op.notIn]: userQuestionIds } },
+        where: { id: { [Op.notIn]: answeredQuestionIds } },
       })
     );
   } catch (err) {

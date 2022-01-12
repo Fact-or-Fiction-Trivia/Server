@@ -22,16 +22,12 @@ const Question = ({ question, streak, setStreak, answered, addStreak }) => {
       answered(question.id);
       alert(`Correct, streak is now ${newStreak}`);
     } else {
-      /**
-       * if logged in
-       * api creates
-       */
       addStreak([
         ...streak,
         { questionId: question.id, answeredCorrectly: false },
       ]);
-      const finalStreak = streak;
-      setStreak(0);
+      const finalStreak = streak.length;
+      setStreak([]);
       answered(question.id);
       alert(`Oh No! That was wrong, streak was ${finalStreak}`);
     }
@@ -58,7 +54,7 @@ const Question = ({ question, streak, setStreak, answered, addStreak }) => {
         </Container>
         <ListGroup>
           {question.tags.map((tag) => (
-            <ListGroupItem>{tag.name}</ListGroupItem>
+            <ListGroupItem key={tag.id}>{tag.name}</ListGroupItem>
           ))}
         </ListGroup>
       </Container>

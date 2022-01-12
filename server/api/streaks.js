@@ -14,7 +14,6 @@ const { requireToken, isAgentOfUser } = require("./middleware");
  */
 router.post("/", requireToken, async (req, res, next) => {
   try {
-    console.log("HERE IS THE BODY", req.body);
     const answeredQuestions = req.body;
 
     let score = answeredQuestions.length - 1;
