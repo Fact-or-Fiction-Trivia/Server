@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 
 export const Authenticate = ({ auth }) => {
   if (auth) {
