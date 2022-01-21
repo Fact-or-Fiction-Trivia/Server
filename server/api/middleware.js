@@ -3,10 +3,11 @@ const {
   Op,
   models: { User, Agent, Transaction, Client },
 } = require("../db");
+const pkg = require("../../package.json");
 
 const requireToken = async (req, res, next) => {
   try {
-    req.user = await User.findByToken(req.cookies.token);
+    req.user = await User.findByToken(req.cookies[`token-${pkg.name}`]);
     next();
   } catch (e) {
     next(e);
