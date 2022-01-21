@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import QueryString from "qs";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 
 export const FourOhFour = ({ auth, match, location }) => {
   const { any } = match.params;
