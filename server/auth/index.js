@@ -50,7 +50,11 @@ router.put("/register", async (req, res, next) => {
 
 router.get("/me", async (req, res, next) => {
   try {
+<<<<<<< HEAD
     res.json(await User.findByToken(req.cookies[`token-${pkg.name}`]));
+=======
+    res.json(await User.findByToken(req.cookies.token));
+>>>>>>> 3974e07bcb34d75168bf55f5121bc6cd5f37e89a
   } catch (ex) {
     next(ex);
   }
