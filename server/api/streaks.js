@@ -9,13 +9,32 @@ const {
 const { requireToken, isAgentOfUser } = require("./middleware");
 
 /**
+ * GET/:id/
+ * Get the highest streak for the user
+ */
+
+router.get("/:id", requireToken, async (req, res, next) => {
+  try {
+    const streaks = await Streak.findAll({ where: { userId: req.params.id } });
+    const max = streaks.reduce((prev, current) => {
+      return prev.score > current.score ? prev : current || 0;
+    });
+
+    res.json({
+      max,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * POST /
  * Create streak with userAnswered questions
  */
 router.post("/", requireToken, async (req, res, next) => {
   try {
     const answeredQuestions = req.body;
-
     let score = answeredQuestions.length - 1;
 
     const streak = await Streak.create({ score, userId: req.user.id });
