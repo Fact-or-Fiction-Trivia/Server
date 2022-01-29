@@ -9,6 +9,7 @@ User.hasMany(Question);
 
 //Streaks Table
 Streak.belongsTo(User);
+User.hasMany(Streak);
 
 //UserAnswered Table
 User.belongsToMany(Question, { through: UserAnswered });
