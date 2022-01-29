@@ -13,6 +13,14 @@ const requireToken = async (req, res, next) => {
     next(e);
   }
 };
+const requireTokenOptional = async (req, res, next) => {
+  try {
+    req.user = await User.findByTokenOptional(req.cookies[`token-${pkg.name}`]);
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
 
 const isAgentOfUser = async (req, res, next) => {
   try {
@@ -58,6 +66,7 @@ const isTransactionOfAgent = async (req, res, next) => {
 
 module.exports = {
   requireToken,
+  requireTokenOptional,
   isAgentOfUser,
   isClientOfAgent,
   isTransactionOfAgent,
