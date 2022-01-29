@@ -9,13 +9,25 @@ const {
 const { requireToken, isAgentOfUser } = require("./middleware");
 
 /**
+ * GET/:id/
+ * Get the highest streak for the user
+ */
+
+router.get("/", requireToken, async (req, res, next) => {
+  try {
+    res.json(req.user.maxScore);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * POST /
  * Create streak with userAnswered questions
  */
 router.post("/", requireToken, async (req, res, next) => {
   try {
     const answeredQuestions = req.body;
-
     let score = answeredQuestions.length - 1;
 
     const streak = await Streak.create({ score, userId: req.user.id });
