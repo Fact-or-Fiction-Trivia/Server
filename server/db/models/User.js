@@ -104,6 +104,19 @@ User.findByToken = async function (token) {
   }
 };
 
+User.findByTokenOptional = async function (token) {
+  try {
+    const { id } = await jwt.verify(token, process.env.JWT);
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw "bad";
+    }
+    return user;
+  } catch (ex) {
+    return false;
+  }
+};
+
 User.isAdmin = async function (token) {
   try {
     const { id } = await jwt.verify(token, process.env.JWT);
