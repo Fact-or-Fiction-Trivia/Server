@@ -40,7 +40,7 @@ router.post("/", requireToken, async (req, res, next) => {
       });
     }
 
-    res.sendStatus(200);
+    res.json(score);
   } catch (err) {
     next(err);
   }
