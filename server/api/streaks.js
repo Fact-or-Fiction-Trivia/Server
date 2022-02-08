@@ -13,6 +13,7 @@ const { requireToken, isAgentOfUser } = require("./middleware");
  * Get the highest streak for the user
  */
 
+
 router.get("/", requireToken, async (req, res, next) => {
   try {
     res.json(req.user.maxScore);
