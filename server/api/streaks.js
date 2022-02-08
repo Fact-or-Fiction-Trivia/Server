@@ -13,16 +13,10 @@ const { requireToken, isAgentOfUser } = require("./middleware");
  * Get the highest streak for the user
  */
 
-router.get("/:id", requireToken, async (req, res, next) => {
-  try {
-    const streaks = await Streak.findAll({ where: { userId: req.params.id } });
-    const max = streaks.reduce((prev, current) => {
-      return prev.score > current.score ? prev : current || 0;
-    });
 
-    res.json({
-      max,
-    });
+router.get("/", requireToken, async (req, res, next) => {
+  try {
+    res.json(req.user.maxScore);
   } catch (err) {
     next(err);
   }
@@ -47,7 +41,7 @@ router.post("/", requireToken, async (req, res, next) => {
       });
     }
 
-    res.sendStatus(200);
+    res.json(score);
   } catch (err) {
     next(err);
   }

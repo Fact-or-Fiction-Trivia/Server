@@ -9,6 +9,9 @@ import AuthForm from "../views/AuthForm";
 import FourOhFour from "../views/FourOhFour";
 import Home from "../views/Home";
 import Authenticate from "../views/Authenticate";
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const Routes = ({ getMe, isLoggedIn, preCheck, auth }) => {
   useEffect(() => {
