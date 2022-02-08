@@ -17,7 +17,7 @@ router.get("/", requireTokenOptional, async (req, res, next) => {
     if (req.user) {
       const answeredQuestionIds = await User.findByPk(req.user.id, {
         include: [{ model: Question }],
-      }).then(({ questions }) => questions.map((question) => question.id));
+      }).then(({ questions }) => questions.map(({ id }) => id));
 
       res.json(
         await Question.findAll({
