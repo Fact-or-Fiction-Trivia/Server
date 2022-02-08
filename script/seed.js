@@ -82,16 +82,35 @@ async function seed() {
   const [admin, user] = allUsers;
   const [one, two, three, four] = allQuestions;
 
-  //Create a UserAnswered as correct
-  const answered = await UserAnswered.create({
-    answeredCorrectly: true,
-    userId: user.id,
-    questionId: one.id,
-  });
+  // //Create a UserAnswered as correct
+  // const answered = await UserAnswered.create({
+  //   answeredCorrectly: true,
+  //   userId: user.id,
+  //   questionId: one.id,
+  // });
+  // const answeredTwo = await UserAnswered.create({
+  //   answeredCorrectly: true,
+  //   userId: user.id,
+  //   questionId: two.id,
+  // });
 
-  //Create a streak and associate UserAnswered
-  const streak = await Streak.create({ score: 900, userId: user.id });
-  await streak.addUseranswered(answered);
+  // //Create a streak and associate UserAnswered
+  // const streak = await Streak.create({ score: 7, userId: user.id });
+  // await streak.addUseranswered(answered);
+  // const userMaxScore1 = await User.findByPk(user.id).then(
+  //   ({ maxScore }) => maxScore
+  // );
+
+  // const streakTwo = await Streak.create({ score: 5, userId: user.id });
+  // await streakTwo.addUseranswered(answeredTwo);
+
+  // // const [max] = await Streak.findAll({
+  // //   where: { userId: user.id },
+  // //   order: [["score", "DESC"]],
+  // // }).then((streaks) => streaks.map(({ score }) => score));
+  // const userMaxScore2 = await User.findByPk(user.id).then(
+  //   ({ maxScore }) => maxScore
+  // );
 }
 
 /*

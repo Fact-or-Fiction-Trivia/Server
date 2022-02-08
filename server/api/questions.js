@@ -6,24 +6,28 @@ const {
   models: { User, Question, Tag },
 } = require("../db");
 
-const { requireToken, isAgentOfUser } = require("./middleware");
+const { requireToken, requireTokenOptional } = require("./middleware");
 
 /**
  * GET /
  * All Questions
  */
-router.get("/", requireToken, async (req, res, next) => {
+router.get("/", requireTokenOptional, async (req, res, next) => {
   try {
-    const answeredQuestionIds = await User.findByPk(req.user.id, {
-      include: [{ model: Question }],
-    }).then(({ questions }) => questions.map((question) => question.id));
+    if (req.user) {
+      const answeredQuestionIds = await User.findByPk(req.user.id, {
+        include: [{ model: Question }],
+      }).then(({ questions }) => questions.map(({ id }) => id));
 
-    res.json(
-      await Question.findAll({
-        include: [Tag],
-        where: { id: { [Op.notIn]: answeredQuestionIds } },
-      })
-    );
+      res.json(
+        await Question.findAll({
+          include: [Tag],
+          where: { id: { [Op.notIn]: answeredQuestionIds } },
+        })
+      );
+    } else {
+      res.json(await Question.findAll());
+    }
   } catch (err) {
     next(err);
   }

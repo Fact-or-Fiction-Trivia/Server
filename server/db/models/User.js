@@ -21,7 +21,6 @@ const User = db.define("user", {
       }`;
     },
   },
-
   email: {
     type: Sequelize.STRING,
     unique: true,
@@ -33,6 +32,10 @@ const User = db.define("user", {
   password: {
     type: Sequelize.STRING,
   },
+  maxScore: {
+    type: Sequelize.STRING,
+    defaultValue: 0,
+  },
   role: {
     type: Sequelize.ENUM("User", "Admin"),
     allowNull: false,
@@ -42,13 +45,7 @@ const User = db.define("user", {
     allowNull: false,
   },
 });
-/**
- *  username: {
-    type: Sequelize.STRING,
-    unique: true,
-    allowNull: false,
-  },
- */
+
 module.exports = User;
 
 /**
@@ -71,6 +68,12 @@ User.prototype.ownsAgent = async function (agentId) {
 
 User.prototype.generateInviteId = function () {
   return jwt.sign({ id: this.id, timestamp: Date.now() }, process.env.JWT);
+};
+
+User.prototype.setMaxScore = async function (score) {
+  if (score > this.maxScore) {
+    await this.update({ maxScore: score });
+  }
 };
 
 /**
@@ -98,6 +101,19 @@ User.findByToken = async function (token) {
     const error = Error("bad token");
     error.status = 401;
     throw error;
+  }
+};
+
+User.findByTokenOptional = async function (token) {
+  try {
+    const { id } = await jwt.verify(token, process.env.JWT);
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw "bad";
+    }
+    return user;
+  } catch (ex) {
+    return false;
   }
 };
 
