@@ -13,6 +13,7 @@ const requireToken = async (req, res, next) => {
     next(e);
   }
 };
+
 const requireTokenOptional = async (req, res, next) => {
   try {
     req.user = await User.findByTokenOptional(req.cookies[`token-${pkg.name}`]);
